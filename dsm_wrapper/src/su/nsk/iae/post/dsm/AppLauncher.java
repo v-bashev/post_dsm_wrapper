@@ -1,9 +1,16 @@
 package su.nsk.iae.post.dsm;
 
 import java.io.IOException;
-
-import su.nsk.iae.post.dsm.manager.client.DSMMClientImpl;
-import su.nsk.iae.post.dsm.manager.client.DSMMClientLauncher;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import su.nsk.iae.post.dsm.manager.common.Request;
+import su.nsk.iae.post.dsm.manager.common.Response;
 import su.nsk.iae.post.dsm.server.ServerLauncher;
 
 public class AppLauncher {
@@ -17,39 +24,44 @@ public class AppLauncher {
 	private static ServerLauncher serverLauncher;
 
 	public static void main(String[] args) {
-//		int port = DEFAULT_PORT;
-//		String host = DEFAULT_HOST;
-//		for (int i = 0; i < args.length; i++) {
-//			String arg = args[i];
-//			switch (arg) {
-//			case "-port":
-//				i++;
-//				port = Integer.parseInt(args[i]);
-//				break;
-//			case "-host":
-//				i++;
-//				host = args[i];
-//				break;
-//			}
-//		}
-//
-//		serverLauncher = new ServerLauncher();
-//		serverLauncher.start(host, port);
-//
-//		Runtime.getRuntime().addShutdownHook(new Thread(() -> stop()));
-//
-//		System.out.println("[" + DSM_NAME + "] Server started");
-//		try {
-//			System.in.read();
-//		} catch (IOException e) {
-//			System.out.println("[" + DSM_NAME + "] Caught an exception");
-//			e.printStackTrace();
-//		} finally {
-//			stop();
-//		}
 
-		DSMMClientLauncher cl = new DSMMClientLauncher(new DSMMClientImpl());
-		cl.start("127.0.0.1", 8080);
+		int port = DEFAULT_PORT;
+
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(new URI("http://127.0.0.1:8080"))
+					.headers("REQUEST", Request.NEW_MODULE.toString())
+					.GET()
+					.build();
+			HttpResponse<String> response = HttpClient.newBuilder()
+					.proxy(ProxySelector.getDefault())
+					.build()
+					.send(request, HttpResponse.BodyHandlers.ofString());
+			JsonElement jsonTree = new JsonParser().parse(response.body());
+			if (jsonTree.isJsonObject()) {
+				JsonObject json = jsonTree.getAsJsonObject();
+				JsonElement element = json.get(Response.ResponseType.FREE_PORT.toString());
+				port = element.getAsInt();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		serverLauncher = new ServerLauncher();
+		System.out.println("Starting server at " + DEFAULT_HOST + ":" + port);
+		serverLauncher.start(DEFAULT_HOST, port);
+
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> stop()));
+
+		System.out.println("[" + DSM_NAME + "] Server started");
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			System.out.println("[" + DSM_NAME + "] Caught an exception");
+			e.printStackTrace();
+		} finally {
+			stop();
+		}
 	}
 
 	static void stop() {
