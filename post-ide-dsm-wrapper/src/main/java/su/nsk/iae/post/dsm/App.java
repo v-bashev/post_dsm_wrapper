@@ -10,32 +10,30 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
-import static java.lang.System.getProperty;
+import java.util.Properties;
 import static java.lang.System.setProperty;
 
 @SpringBootApplication
 public class App {
 
-    private final static String DEFAULT_NAME = "";
-    private final static String DEFAULT_MANAGER_URL = "http://127.0.0.1:7788";
-
     public static void main(String[] args){
-        String moduleName = DEFAULT_NAME;
-        for (int i = 0; i < args.length; i++) {
-            if ("-name" .equals(args[i])) {
-                moduleName = args[++i];
-            }
-        }
-        int freePort = ServerUtils.findFreePort();
         try {
-            registerModule(DEFAULT_MANAGER_URL, moduleName, freePort);
+            Properties properties = new Properties();
+            properties.load(App.class.getClassLoader().getResourceAsStream("dsm.properties"));
+            String managerAddress = properties.getProperty("manager.address");
+            String moduleName = properties.getProperty("dsm.name");
+            for (int i = 0; i < args.length; i++) {
+                if ("-name".equals(args[i])) {
+                    moduleName = args[++i];
+                }
+            }
+            int freePort = ServerUtils.findFreePort();
+            registerModule(managerAddress, moduleName, freePort);
+            setProperty("server.port", String.valueOf(freePort));
+            SpringApplication.run(App.class);
         } catch (Exception e) {
             e.printStackTrace();
-            return;
         }
-        setProperty("server.port", String.valueOf(freePort));
-        SpringApplication.run(App.class);
-        System.out.println("Running on port " + getProperty("server.port"));
     }
 
     private static void registerModule(String managerUrl, String name, int port) throws URISyntaxException, IOException, InterruptedException {
