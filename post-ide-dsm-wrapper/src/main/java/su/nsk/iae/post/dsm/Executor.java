@@ -20,13 +20,16 @@ public class Executor {
 
     public static String execute(DsmRequestBody requestBody) {
         try {
+            Logger.info(Executor.class, "executing for request body: " + requestBody);
+
             if (DSM_DIRECTORY == null || DSM_GENERATOR_CLASS_NAME == null) {
                 readProperties();
             }
 
+            Logger.info(Executor.class, "all required properties are initialized");
             final Injector injector = PoSTStandaloneSetup.getInjector();
             final JavaIoFileSystemAccess fsa = injector.getInstance(JavaIoFileSystemAccess.class);
-            final Resource resource = ModelDeserializer.deserializeFromXMI(requestBody.getAst());
+//            final Resource resource = ModelDeserializer.deserializeFromXMI(requestBody.getAst());
             final IGeneratorContext context = new NullGeneratorContext();
             final String generated = requestBody.getRoot() +
                     File.separator +
@@ -34,15 +37,20 @@ public class Executor {
                     File.separator +
                     requestBody.getFileName();
             fsa.setOutputPath(generated);
+            Logger.info(Executor.class, "output path: " + generated);
 
+            Logger.info(Executor.class, "creating generator...");
             Class<?> clazz = Class.forName(DSM_GENERATOR_CLASS_NAME);
             final IPoSTGenerator generator = (IPoSTGenerator) clazz.getConstructor().newInstance();
-            generator.beforeGenerate(resource, fsa, context);
-            generator.doGenerate(resource, fsa, context);
-            generator.afterGenerate(resource, fsa, context);
+            Logger.info(Executor.class, "successfully created generator of class " + generator.getClass().getName());
+//            generator.beforeGenerate(resource, fsa, context);
+//            generator.doGenerate(resource, fsa, context);
+//            generator.afterGenerate(resource, fsa, context);
 
+            Logger.info(Executor.class, "files generated");
             return "Files generated in " + generated;
         } catch (Exception e) {
+            Logger.error(Executor.class, e.getMessage());
             return "Error occurred: " + e.getMessage();
         }
     }

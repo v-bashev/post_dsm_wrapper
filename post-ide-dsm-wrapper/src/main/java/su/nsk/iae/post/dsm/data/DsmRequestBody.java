@@ -37,4 +37,13 @@ public class DsmRequestBody {
     public void setAst(String ast) {
         this.ast = ast;
     }
+
+    @Override
+    public String toString() {
+        return "{\"id\": \"" + id +
+                "\", \"root\": \"" + root +
+                "\", \"fileName\": \"" + fileName +
+                "\", \"ast\": \"" + ast +
+                "\"}";
+    }
 }
