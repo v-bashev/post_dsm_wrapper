@@ -7,13 +7,14 @@ import su.nsk.iae.post.dsm.data.DsmRequestBody;
 
 @RestController
 public class Controller {
+
     @RequestMapping(value = "")
     public String hello() {
         return "Hello world!";
     }
 
-    @PostMapping(value = "generate")
-    public void generate(DsmRequestBody requestBody) {
-        Generator.generate(requestBody);
+    @PostMapping(value = "run")
+    public String run(DsmRequestBody requestBody) {
+        return Executor.execute(requestBody);
     }
 }

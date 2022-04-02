@@ -1,7 +1,5 @@
 package su.nsk.iae.post.dsm.data;
 
-import java.util.Scanner;
-
 public class DsmRequestBody {
     private String id;
     private String root;

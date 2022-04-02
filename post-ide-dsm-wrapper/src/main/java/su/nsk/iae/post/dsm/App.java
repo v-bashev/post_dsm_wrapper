@@ -21,14 +21,14 @@ public class App {
             Properties properties = new Properties();
             properties.load(App.class.getClassLoader().getResourceAsStream("dsm.properties"));
             String managerAddress = properties.getProperty("manager.address");
-            String moduleName = properties.getProperty("dsm.name");
+            String dsmName = properties.getProperty("dsm.name");
             for (int i = 0; i < args.length; i++) {
                 if ("-name".equals(args[i])) {
-                    moduleName = args[++i];
+                    dsmName = args[++i];
                 }
             }
             int freePort = ServerUtils.findFreePort();
-            registerModule(managerAddress, moduleName, freePort);
+            registerModule(managerAddress, dsmName, freePort);
             setProperty("server.port", String.valueOf(freePort));
             SpringApplication.run(App.class);
         } catch (Exception e) {
