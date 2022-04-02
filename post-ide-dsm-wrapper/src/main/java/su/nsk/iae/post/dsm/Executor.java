@@ -52,5 +52,9 @@ public class Executor {
         properties.load(App.class.getClassLoader().getResourceAsStream("dsm.properties"));
         DSM_DIRECTORY = properties.getProperty("dsm.directory");
         DSM_GENERATOR_CLASS_NAME = properties.getProperty("dsm.generatorClassName");
+
+        Logger.info(Executor.class, "properties values:");
+        Logger.info(Executor.class, "DSM_DIRECTORY = " + DSM_DIRECTORY);
+        Logger.info(Executor.class, "DSM_GENERATOR_CLASS_NAME = " + DSM_GENERATOR_CLASS_NAME);
     }
 }
