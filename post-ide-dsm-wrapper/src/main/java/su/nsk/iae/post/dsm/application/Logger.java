@@ -1,4 +1,4 @@
-package su.nsk.iae.post.dsm;
+package su.nsk.iae.post.dsm.application;
 
 public class Logger {
 

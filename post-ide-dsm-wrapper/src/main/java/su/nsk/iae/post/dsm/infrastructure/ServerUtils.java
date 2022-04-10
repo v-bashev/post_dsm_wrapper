@@ -1,4 +1,4 @@
-package su.nsk.iae.post.dsm;
+package su.nsk.iae.post.dsm.infrastructure;
 
 import java.io.IOException;
 import java.net.ServerSocket;

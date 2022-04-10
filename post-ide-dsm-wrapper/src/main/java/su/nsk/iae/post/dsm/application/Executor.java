@@ -1,16 +1,13 @@
-package su.nsk.iae.post.dsm;
+package su.nsk.iae.post.dsm.application;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import com.google.inject.Injector;
 import su.nsk.iae.post.PoSTStandaloneSetup;
-import su.nsk.iae.post.deserialization.ModelDeserializer;
-import su.nsk.iae.post.dsm.data.DsmRequestBody;
-import su.nsk.iae.post.dsm.data.NullGeneratorContext;
+import su.nsk.iae.post.dsm.domain.*;
 import su.nsk.iae.post.generator.IPoSTGenerator;
 
 public class Executor {
@@ -18,9 +15,14 @@ public class Executor {
     public static String DSM_DIRECTORY;
     public static String DSM_GENERATOR_CLASS_NAME;
 
-    public static String execute(DsmRequestBody requestBody) {
+    public static String execute(DsmRequestDomain requestBody) {
         try {
-            Logger.info(Executor.class, "executing for request body: " + requestBody);
+            Logger.info(Executor.class, "executing for request: " +
+                    "id = " + requestBody.getId() +
+                    ", root = " + requestBody.getRoot() +
+                    ", fileName = " + requestBody.getFileName() +
+                    ", ast = " + requestBody.getAst()
+            );
 
             if (DSM_DIRECTORY == null || DSM_GENERATOR_CLASS_NAME == null) {
                 readProperties();
@@ -57,7 +59,7 @@ public class Executor {
 
     private static void readProperties() throws IOException {
         Properties properties = new Properties();
-        properties.load(App.class.getClassLoader().getResourceAsStream("dsm.properties"));
+        properties.load(Executor.class.getClassLoader().getResourceAsStream("dsm.properties"));
         DSM_DIRECTORY = properties.getProperty("dsm.directory");
         DSM_GENERATOR_CLASS_NAME = properties.getProperty("dsm.generatorClassName");
 

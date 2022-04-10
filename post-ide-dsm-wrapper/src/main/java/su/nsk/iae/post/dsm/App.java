@@ -2,6 +2,8 @@ package su.nsk.iae.post.dsm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import su.nsk.iae.post.dsm.infrastructure.ServerUtils;
+
 import java.io.IOException;
 import java.net.ProxySelector;
 import java.net.URI;

@@ -1,4 +1,4 @@
-package su.nsk.iae.post.dsm.data;
+package su.nsk.iae.post.dsm.domain;
 
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.eclipse.xtext.util.CancelIndicator;
