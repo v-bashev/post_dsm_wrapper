@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation files('su.nsk.iae.post.ide-0.2.2-ls.jar')
+    implementation files('su.nsk.iae.post.ide-1.0.0-ls.jar')
     // TODO change to your jar with generator
     implementation files('su.nsk.iae.post.generator.st_0.2.1.jar')
     implementation platform('org.springframework.boot:spring-boot-dependencies:2.4.5')
