@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import su.nsk.iae.post.dsm.application.Executor;
+import java.util.LinkedHashMap;
 
 @RestController
 public class Controller {
@@ -15,7 +16,8 @@ public class Controller {
     }
 
     @PostMapping(value = "run")
-    public String run(@RequestBody DsmRequestBody requestBody) {
-        return Executor.execute(requestBody.toDomain());
+    public String run(@RequestBody LinkedHashMap<String, Object> request) {
+        System.out.printf("/run for request: " + request.toString());
+        return Executor.execute(request);
     }
 }
