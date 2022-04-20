@@ -3,7 +3,6 @@ package su.nsk.iae.post.dsm;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import su.nsk.iae.post.dsm.infrastructure.ServerUtils;
-
 import java.io.IOException;
 import java.net.ProxySelector;
 import java.net.URI;
@@ -27,6 +26,9 @@ public class App {
             for (int i = 0; i < args.length; i++) {
                 if ("-name".equals(args[i])) {
                     dsmName = args[++i];
+                }
+                if ("-ma".equals(args[i])) {
+                    managerAddress = args[++i];
                 }
             }
             int freePort = ServerUtils.findFreePort();
