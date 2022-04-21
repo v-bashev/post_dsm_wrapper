@@ -2,6 +2,7 @@ package su.nsk.iae.post.dsm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import su.nsk.iae.post.dsm.application.Logger;
 import su.nsk.iae.post.dsm.infrastructure.ServerUtils;
 import java.io.IOException;
 import java.net.ProxySelector;
@@ -41,6 +42,8 @@ public class App {
     }
 
     private static void registerModule(String managerUrl, String name, int port) throws URISyntaxException, IOException, InterruptedException {
+        Logger.info(App.class, "registering ourselves");
+        Logger.info(App.class, "connecting to manager by url: " + managerUrl);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(managerUrl + "/new-module"))
                 .headers("Content-Type", "application/json")
