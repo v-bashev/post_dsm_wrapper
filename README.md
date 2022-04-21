@@ -4,6 +4,7 @@ New DSM-wrapper, adapted for DSM-manager
 # Use examples
 
 - java -jar post-ide-dsm-wrapper-1.0-SNAPSHOT.jar -name my-dsm
+- java -jar post-ide-dsm-wrapper-1.0-SNAPSHOT.jar -ma http://127.0.1.1:8181
 
 # Links
 
